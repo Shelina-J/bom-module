@@ -31,7 +31,6 @@ public class Supplier implements Serializable{
 	@Column(name="supplier_name")
 	private String supplierName; 
 	
-	
 //	@Pattern(regexp = "^[a-zA-Z ]{5,20}$")
 	@Column(name="material_id")
 	private String materialId;

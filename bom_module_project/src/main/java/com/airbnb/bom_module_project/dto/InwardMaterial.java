@@ -43,13 +43,11 @@ public class InwardMaterial implements Serializable {
 	@Column(name="shelf_life")
 	private double shelflife; 
 	
-	@OneToMany(mappedBy = "productionTransaction")
 	@Column(name="prod_transaction")
-	private List<Production> productionTransaction; 
+	private List<Long> productionTransaction; 
 	
-//	@OneToOne(cascade = CascadeType.ALL)
 	@Column(name="inward_return_transaction")
-	private Production inwardReturnTransaction;
+	private List<Long> inwardReturnTransaction;
 	
 	@ManyToOne( cascade = CascadeType.ALL)
 	@JoinColumn(name="supplier_id")
@@ -103,19 +101,21 @@ public class InwardMaterial implements Serializable {
 		this.shelflife = shelflife;
 	}
 
-	public List<Production> getProductionTransaction() {
+	
+	public List<Long> getProductionTransaction() {
 		return productionTransaction;
 	}
 
-	public void setProductionTransaction(List<Production> productionTransaction) {
+	public void setProductionTransaction(List<Long> productionTransaction) {
 		this.productionTransaction = productionTransaction;
 	}
 
-	public Production getInwardReturnTransaction() {
+	
+	public List<Long> getInwardReturnTransaction() {
 		return inwardReturnTransaction;
 	}
 
-	public void setInwardReturnTransaction(Production inwardReturnTransaction) {
+	public void setInwardReturnTransaction(List<Long> inwardReturnTransaction) {
 		this.inwardReturnTransaction = inwardReturnTransaction;
 	}
 
