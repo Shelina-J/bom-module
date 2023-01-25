@@ -48,7 +48,7 @@ public class InwardMaterialRepository {
 		
 	}
 
-
+	@Transactional
 	public InwardMaterial sendToProduction(InwardMaterial toUpdateMaterial) {
 		try {
 			InwardMaterial updatedMaterial=entityManager.merge(toUpdateMaterial);
@@ -60,12 +60,23 @@ public class InwardMaterialRepository {
 		
 	}
 
-
+	@Transactional
 	public List<InwardMaterial> findMaterialByProd(long mrn) {
 		try {
 			String ql="FROM InwardMaterial WHERE productionTransaction ?1";
 			Query query= entityManager.createQuery(ql);
 			return query.getResultList();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+	@Transactional
+	public InwardMaterial findMaterialById(String mid) {
+		try {
+			return entityManager.find(InwardMaterial.class, mid);
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;

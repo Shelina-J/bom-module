@@ -66,13 +66,14 @@ public class InwardMaterialController {
 			
 	}	
 	
-	@PatchMapping("/material")
+	@PatchMapping("/material-transaction")
 	public ResponseEntity<ResponseStructure<InwardMaterial>> sendToProduction(@RequestBody InwardMaterial inwardMaterial) {
 		Supplier getSupplierId=inwardMaterial.getSupplierId();
 		Supplier foundSupplier=supplierService.findSupplierById(getSupplierId.getSupplierId());
 		ResponseStructure<InwardMaterial> responseStructure= new ResponseStructure<>();
 		if (foundSupplier!=null) {
-			InwardMaterial transactionToProd=inwardMaterialService.sendToProduction(inwardMaterial,foundSupplier);
+			InwardMaterial foundInwardMaterial=inwardMaterialService.findMaterialById(inwardMaterial.getMaterialId());
+			InwardMaterial transactionToProd=inwardMaterialService.sendToProduction(inwardMaterial,foundSupplier,foundInwardMaterial);
 			
 			if (transactionToProd!=null) {
 				responseStructure.setStatus(HttpStatus.OK.value());
@@ -94,7 +95,9 @@ public class InwardMaterialController {
 		}
 	}
 	
-	@GetMapping("/find-material-ny-mrn/{mrn}")
+	
+	
+	@GetMapping("/find-material-by-mrn/{mrn}")
 	public ResponseEntity<ResponseStructure<List<InwardMaterial>>> findMaterialByProdMrn(@PathVariable("mrn") long mrn) {
 		List<InwardMaterial> foundMaterial=inwardMaterialService.findMaterialByProdMrn(mrn);
 		ResponseStructure<List<InwardMaterial>> responseStructure= new ResponseStructure<>();
@@ -111,6 +114,28 @@ public class InwardMaterialController {
 			responseStructure.setData(foundMaterial);
 			
 			ResponseEntity<ResponseStructure<List<InwardMaterial>>> responseEntity = new ResponseEntity<ResponseStructure<List<InwardMaterial>>>(responseStructure, HttpStatus.OK);
+			return responseEntity;
+		}
+	}
+	
+	
+	@GetMapping("find-material/{id}")
+	public ResponseEntity<ResponseStructure<InwardMaterial>> findMaterialById(@PathVariable ("mid") String mid) {
+		InwardMaterial foundInwardMaterial=inwardMaterialService.findMaterialById(mid);
+		ResponseStructure<InwardMaterial> responseStructure = new ResponseStructure<>();
+		if (foundInwardMaterial!=null) {
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Material found");
+			responseStructure.setData(foundInwardMaterial);
+			
+			ResponseEntity<ResponseStructure<InwardMaterial>> responseEntity= new ResponseEntity<ResponseStructure<InwardMaterial>>(responseStructure, HttpStatus.OK);
+			return responseEntity;
+		}else {
+			responseStructure.setStatus(HttpStatus.OK.value());
+			responseStructure.setMessage("Material not found");
+			responseStructure.setData(foundInwardMaterial);
+			
+			ResponseEntity<ResponseStructure<InwardMaterial>> responseEntity= new ResponseEntity<ResponseStructure<InwardMaterial>>(responseStructure, HttpStatus.OK);
 			return responseEntity;
 		}
 	}

@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +17,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name="inward_material")
@@ -26,17 +30,21 @@ public class InwardMaterial implements Serializable {
 	@Id
 //	@OneToOne(cascade = CascadeType.ALL)
 	@Column(name="material_id")
-	private String materialId=material.getMaterialId(); 
+	private String materialId; 
+//	=material.getMaterialId()
 	
 	@Column(name="material_name")
 	private String materialName; 
 	
+	@Min(10)
+	@Max(1000)
 	@Column(name="quantity")
 	private double quantity; 
 	
 	@Column(name="issued_quantity_for_prod")
 	private double issuedQuantityForProduction;
 	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	@Column(name="date_of_receipt")
 	private LocalDate dateOfReceipt; 
 	
